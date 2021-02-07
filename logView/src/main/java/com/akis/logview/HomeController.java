@@ -37,9 +37,12 @@ public class HomeController {
 		thread.setDaemon(true);
 		thread.start();
 		
-		model.addAttribute("logview", watcher.getLog() );
+		watcher.stop();
 		
-		logger.error(watcher.getLog());
+		
+		model.addAttribute("logview", watcher.getLog());
+		logger.error(" log view : " + watcher.getLog());
+		
 		
 		return "home";
 	}

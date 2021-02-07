@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.akis.logview.model.logVO;
+
 
 public class FileLineWatcher implements Runnable{
 	private static final Logger logger = LoggerFactory.getLogger(FileLineWatcher.class);
@@ -17,15 +19,16 @@ public class FileLineWatcher implements Runnable{
 
 	private boolean isRun;
 	private final File file;
-
-	private String totalLog;
+	logVO logVo;
 	
 	public FileLineWatcher(File file) {
 		this.file = file;
 	}
+	
 
-	public String getLog() {
-		return this.totalLog;
+
+	public void setLog(String le) {
+		logVo.setLog(le);
 	}
 
 	@Override
@@ -34,7 +37,7 @@ public class FileLineWatcher implements Runnable{
 
 		isRun = true;
 
-		if (file.exists()) {
+		if (!file.exists()) {
 			logger.error("Failed to find a file - " + file.getName());
 		}
 
@@ -44,8 +47,8 @@ public class FileLineWatcher implements Runnable{
 			while (isRun) {
 				final String le = br.readLine();
 				if (le != null) {
-					logger.info("new line added - " + le);
-					this.totalLog += le + " ";
+					logger.info(le);
+					//setLog(le);
 				} else {
 					Thread.sleep(DELAY_MILLIS);
 				}
@@ -61,5 +64,7 @@ public class FileLineWatcher implements Runnable{
 	public void stop() {
 		isRun = false;
 	}
-	
+	public logVO getLog() {
+		return logVo;
+	}
 }
